@@ -5,11 +5,20 @@ import type { Project } from '@/types';
 
 interface Props {
   projects: Project[];
+  title?: string | null;
+  subtitle?: string | null;
+  content?: Record<string, any>;
 }
 
-export default function ProjectsGrid({ projects }: Props) {
+export default function ProjectsGrid({ projects, title, subtitle, content }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [showAll, setShowAll] = useState(false);
+
+  const label = content?.section_label || 'Our Work';
+  const headline = title || 'Projects that speak for themselves';
+  const sub =
+    subtitle ||
+    "A selection of brands and experiences we've had the privilege to create.";
 
   // Scroll reveal
   useEffect(() => {
@@ -31,13 +40,10 @@ export default function ProjectsGrid({ projects }: Props) {
 
   return (
     <section className="projects-section" id="work">
-      <div className="section-label reveal">Our Work</div>
-      <h2 className="section-headline reveal">
-        Projects that <em>speak</em> for themselves
-      </h2>
+      <div className="section-label reveal">{label}</div>
+      <h2 className="section-headline reveal">{headline}</h2>
       <p className="section-sub reveal" style={{ marginBottom: '3rem' }}>
-        A selection of brands and experiences we&apos;ve had the privilege to
-        create.
+        {sub}
       </p>
 
       <div className="projects-grid" id="projectsGrid" ref={gridRef}>

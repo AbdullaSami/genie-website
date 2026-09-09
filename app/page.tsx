@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import CustomCursor from '@/components/CustomCursor';
 import ScrollObserver from '@/components/ScrollObserver';
 import Nav from '@/components/Nav';
@@ -10,8 +11,23 @@ import TeamSection from '@/components/TeamSection';
 import Testimonials from '@/components/Testimonials';
 import ContactForm from '@/components/ContactForm';
 import Footer from '@/components/Footer';
+import DynamicSectionRenderer from '@/components/DynamicSectionRenderer';
 import { createPublicClient } from '@/lib/supabase/server';
-import type { Stat, Service, Project, TeamMember, Testimonial } from '@/types';
+import type {
+  Stat,
+  Service,
+  Project,
+  TeamMember,
+  Testimonial,
+  SiteSettings,
+  NavigationItem,
+  SocialLink,
+  FooterSection,
+  CMSPage,
+  PageSection,
+} from '@/types';
+
+export const revalidate = 0; // Dynamic SSR for immediate CMS updates
 
 const FALLBACK = {
   stats: [
@@ -192,22 +208,81 @@ const FALLBACK = {
   ],
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const supabase = createPublicClient();
+    const [settingsRes, pageRes] = await Promise.all([
+      supabase.from('site_settings').select('*').eq('id', 'default').maybeSingle(),
+      supabase.from('pages').select('*').eq('slug', 'home').maybeSingle(),
+    ]);
+
+    const settings = settingsRes.data as SiteSettings | null;
+    const homePage = pageRes.data as CMSPage | null;
+
+    const title =
+      homePage?.seo_title ||
+      settings?.default_seo_title ||
+      'Genie Studio® — A Brand of Magic That Never Fails';
+
+    const description =
+      homePage?.seo_description ||
+      settings?.default_seo_description ||
+      'Genie Studio is a full-service creative studio specialising in brand identity, web, 3D, AI automation, marketing, and event planning.';
+
+    const ogImage = homePage?.og_image || settings?.default_og_image || '/COLORD_HORIZENTAL.png';
+    const canonical = homePage?.canonical_url || settings?.canonical_url || 'https://genies.studio';
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical,
+      },
+      openGraph: {
+        title,
+        description,
+        url: canonical,
+        siteName: settings?.site_name || 'Genie Studio',
+        images: ogImage ? [{ url: ogImage }] : undefined,
+        type: 'website',
+      },
+    };
+  } catch {
+    return {
+      title: 'Genie Studio® — A Brand of Magic That Never Fails',
+      description:
+        'Genie Studio is a full-service creative studio specialising in brand identity, web, 3D, AI automation, marketing, and event planning.',
+    };
+  }
+}
+
 async function getPageData() {
   try {
     const supabase = createPublicClient();
 
-    const [statsRes, servicesRes, projectsRes, teamRes, testimonialsRes] =
-      await Promise.all([
-        supabase.from('stats').select('*').order('sort_order', { ascending: true }),
-        supabase.from('services').select('*').order('sort_order', { ascending: true }),
-        supabase
-          .from('projects')
-          .select('*')
-          .eq('is_active', true)
-          .order('sort_order', { ascending: true }),
-        supabase.from('team').select('*').order('sort_order', { ascending: true }),
-        supabase.from('testimonials').select('*').order('sort_order', { ascending: true }),
-      ]);
+    const [
+      statsRes,
+      servicesRes,
+      projectsRes,
+      teamRes,
+      testimonialsRes,
+      settingsRes,
+      navRes,
+      socialRes,
+      footerRes,
+      pageRes,
+    ] = await Promise.all([
+      supabase.from('stats').select('*').order('sort_order', { ascending: true }),
+      supabase.from('services').select('*').order('sort_order', { ascending: true }),
+      supabase.from('projects').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
+      supabase.from('team').select('*').order('sort_order', { ascending: true }),
+      supabase.from('testimonials').select('*').order('sort_order', { ascending: true }),
+      supabase.from('site_settings').select('*').eq('id', 'default').maybeSingle(),
+      supabase.from('navigation_items').select('*').order('sort_order', { ascending: true }),
+      supabase.from('social_links').select('*').order('sort_order', { ascending: true }),
+      supabase.from('footer_sections').select('*').order('sort_order', { ascending: true }),
+      supabase.from('pages').select('*, page_sections(*)').eq('slug', 'home').maybeSingle(),
+    ]);
 
     const stats = statsRes.data && statsRes.data.length > 0 ? (statsRes.data as Stat[]) : FALLBACK.stats;
     const services = servicesRes.data && servicesRes.data.length > 0 ? (servicesRes.data as Service[]) : FALLBACK.services;
@@ -215,30 +290,167 @@ async function getPageData() {
     const team = teamRes.data && teamRes.data.length > 0 ? (teamRes.data as TeamMember[]) : FALLBACK.team;
     const testimonials = testimonialsRes.data && testimonialsRes.data.length > 0 ? (testimonialsRes.data as Testimonial[]) : FALLBACK.testimonials;
 
-    return { stats, services, projects, team, testimonials };
+    const settings = settingsRes.data as SiteSettings | null;
+    const navItems = (navRes.data as NavigationItem[]) || [];
+    const socialLinks = (socialRes.data as SocialLink[]) || [];
+    const footerSections = (footerRes.data as FooterSection[]) || [];
+
+    const homePage = pageRes.data as (CMSPage & { page_sections: PageSection[] }) | null;
+    const sections =
+      homePage?.page_sections
+        ? [...homePage.page_sections].sort((a, b) => a.sort_order - b.sort_order)
+        : [];
+
+    return {
+      stats,
+      services,
+      projects,
+      team,
+      testimonials,
+      settings,
+      navItems,
+      socialLinks,
+      footerSections,
+      sections,
+    };
   } catch (error) {
     console.warn('[Genie] Supabase fetch failed in SSR, using fallbacks:', error);
-    return FALLBACK;
+    return {
+      stats: FALLBACK.stats,
+      services: FALLBACK.services,
+      projects: FALLBACK.projects,
+      team: FALLBACK.team,
+      testimonials: FALLBACK.testimonials,
+      settings: null,
+      navItems: [],
+      socialLinks: [],
+      footerSections: [],
+      sections: [],
+    };
   }
 }
 
 export default async function HomePage() {
-  const { stats, services, projects, team, testimonials } = await getPageData();
+  const {
+    stats,
+    services,
+    projects,
+    team,
+    testimonials,
+    settings,
+    navItems,
+    socialLinks,
+    footerSections,
+    sections,
+  } = await getPageData();
+
+  // Helper to render sections
+  function renderSectionBlock(sec: PageSection) {
+    if (!sec.is_active) return null;
+
+    switch (sec.block_type) {
+      case 'hero':
+        return (
+          <Hero
+            key={sec.id}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'stats_band':
+        return <StatsBand key={sec.id} stats={stats} />;
+      case 'services_grid':
+        return (
+          <ServicesGrid
+            key={sec.id}
+            services={services}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'about':
+        return (
+          <AboutSection
+            key={sec.id}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'projects_grid':
+        return (
+          <ProjectsGrid
+            key={sec.id}
+            projects={projects}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'team_section':
+        return (
+          <TeamSection
+            key={sec.id}
+            team={team}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'testimonials':
+        return (
+          <Testimonials
+            key={sec.id}
+            testimonials={testimonials}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      case 'contact_form':
+        return (
+          <ContactForm
+            key={sec.id}
+            title={sec.title}
+            subtitle={sec.subtitle}
+            content={sec.content}
+          />
+        );
+      default:
+        return <DynamicSectionRenderer key={sec.id} section={sec} />;
+    }
+  }
 
   return (
     <main>
       <CustomCursor />
       <ScrollObserver />
-      <Nav />
-      <Hero />
-      <StatsBand stats={stats} />
-      <ServicesGrid services={services} />
-      <AboutSection />
-      <ProjectsGrid projects={projects} />
-      <TeamSection team={team} />
-      <Testimonials testimonials={testimonials} />
-      <ContactForm />
-      <Footer />
+      <Nav settings={settings} items={navItems} />
+
+      {/* Render sections according to CMS page_sections order */}
+      {sections.length > 0 ? (
+        sections.map(renderSectionBlock)
+      ) : (
+        // Rock-solid fallback rendering if sections haven't loaded
+        <>
+          <Hero />
+          <StatsBand stats={stats} />
+          <ServicesGrid services={services} />
+          <AboutSection />
+          <ProjectsGrid projects={projects} />
+          <TeamSection team={team} />
+          <Testimonials testimonials={testimonials} />
+          <ContactForm />
+        </>
+      )}
+
+      <Footer
+        settings={settings}
+        sections={footerSections}
+        socialLinks={socialLinks}
+      />
     </main>
   );
 }

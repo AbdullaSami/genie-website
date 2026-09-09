@@ -2,9 +2,36 @@
 
 import { useState } from 'react';
 
-export default function ContactForm() {
+interface Props {
+  title?: string | null;
+  subtitle?: string | null;
+  content?: Record<string, any>;
+}
+
+const DEFAULT_SERVICES = [
+  'Brand Identity & Strategy',
+  'Web Design & Development',
+  '3D Design & Visualization',
+  'AI Automation',
+  'Marketing & Social Media',
+  'Event Planning & Identity',
+  'Something else',
+];
+
+export default function ContactForm({ title, subtitle, content }: Props) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const label = content?.section_label || 'Ready to Start?';
+  const headline = title || "Let's build something magical";
+  const sub = subtitle || "Tell us about your project and we'll make the magic happen.";
+  const submitText = content?.submit_text || 'Send Message →';
+  const successText = content?.success_message || "✦ Message sent! We'll be in touch soon.";
+
+  const services =
+    content?.services && Array.isArray(content.services) && content.services.length > 0
+      ? content.services
+      : DEFAULT_SERVICES;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,14 +76,14 @@ export default function ContactForm() {
             display: 'inline-block',
           }}
         />
-        Ready to Start?
+        {label}
       </div>
 
       <h2
         className="section-headline reveal"
         style={{ color: '#fff', textAlign: 'center', margin: '0 auto 1rem' }}
       >
-        Let&apos;s build something <em>magical</em>
+        {headline}
       </h2>
 
       <p
@@ -67,7 +94,7 @@ export default function ContactForm() {
           margin: '0 auto 2.5rem',
         }}
       >
-        Tell us about your project and we&apos;ll make the magic happen.
+        {sub}
       </p>
 
       <form className="contact-form reveal" id="contactForm" onSubmit={handleSubmit}>
@@ -102,13 +129,11 @@ export default function ContactForm() {
             <option value="" disabled defaultValue="">
               What do you need?
             </option>
-            <option>Brand Identity &amp; Strategy</option>
-            <option>Web Design &amp; Development</option>
-            <option>3D Design &amp; Visualization</option>
-            <option>AI Automation</option>
-            <option>Marketing &amp; Social Media</option>
-            <option>Event Planning &amp; Identity</option>
-            <option>Something else</option>
+            {services.map((s: string) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -130,7 +155,7 @@ export default function ContactForm() {
             disabled={status === 'sending'}
             id="contactSubmitBtn"
           >
-            {status === 'sending' ? 'Sending…' : 'Send Message →'}
+            {status === 'sending' ? 'Sending…' : submitText}
           </button>
         )}
 
@@ -142,7 +167,7 @@ export default function ContactForm() {
 
         {status === 'success' && (
           <div className="form-success" style={{ display: 'block' }}>
-            ✦ Message sent! We&apos;ll be in touch soon.
+            {successText}
           </div>
         )}
       </form>

@@ -5,12 +5,16 @@ import type { Testimonial } from '@/types';
 
 interface Props {
   testimonials: Testimonial[];
+  title?: string | null;
+  subtitle?: string | null;
+  content?: Record<string, any>;
 }
 
-export default function Testimonials({ testimonials }: Props) {
+export default function Testimonials({ testimonials, content }: Props) {
   const [current, setCurrent] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const total = testimonials.length;
+  const label = content?.section_label || 'What Clients Say';
 
   const goTo = (idx: number) => {
     setCurrent(((idx % total) + total) % total);
@@ -36,7 +40,7 @@ export default function Testimonials({ testimonials }: Props) {
 
   return (
     <section className="testimonial-section">
-      <div className="section-label">What Clients Say</div>
+      <div className="section-label">{label}</div>
 
       <div className="testimonial-track-wrap reveal">
         <div

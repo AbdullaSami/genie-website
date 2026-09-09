@@ -2,19 +2,23 @@ import type { Service } from '@/types';
 
 interface Props {
   services: Service[];
+  title?: string | null;
+  subtitle?: string | null;
+  content?: Record<string, any>;
 }
 
-export default function ServicesGrid({ services }: Props) {
+export default function ServicesGrid({ services, title, subtitle, content }: Props) {
+  const label = content?.section_label || 'What We Do';
+  const headline = title || 'Six ways we make magic happen';
+  const sub =
+    subtitle ||
+    'From the first spark to the final pixel — we cover every creative discipline your brand needs to grow.';
+
   return (
     <section className="services-section" id="services">
-      <div className="section-label reveal">What We Do</div>
-      <h2 className="section-headline reveal">
-        Six ways we make <em>magic happen</em>
-      </h2>
-      <p className="section-sub reveal">
-        From the first spark to the final pixel — we cover every creative
-        discipline your brand needs to grow.
-      </p>
+      <div className="section-label reveal">{label}</div>
+      <h2 className="section-headline reveal">{headline}</h2>
+      <p className="section-sub reveal">{sub}</p>
 
       <div className="services-grid" id="servicesGrid">
         {services.map((s, i) => (

@@ -2,18 +2,21 @@ import type { TeamMember } from '@/types';
 
 interface Props {
   team: TeamMember[];
+  title?: string | null;
+  subtitle?: string | null;
+  content?: Record<string, any>;
 }
 
-export default function TeamSection({ team }: Props) {
+export default function TeamSection({ team, title, subtitle, content }: Props) {
+  const label = content?.section_label || 'The Team';
+  const headline = title || 'Meet the board';
+  const sub = subtitle || 'The minds behind every idea, strategy, and pixel.';
+
   return (
     <section className="board-section">
-      <div className="section-label reveal">The Team</div>
-      <h2 className="section-headline reveal">
-        Meet the <em>board</em>
-      </h2>
-      <p className="section-sub reveal">
-        The minds behind every idea, strategy, and pixel.
-      </p>
+      <div className="section-label reveal">{label}</div>
+      <h2 className="section-headline reveal">{headline}</h2>
+      <p className="section-sub reveal">{sub}</p>
 
       <div className="board-grid" id="boardGrid">
         {team.map((m, i) => (
