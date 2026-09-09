@@ -5,7 +5,6 @@ import { cookies } from 'next/headers'
 const supabaseUrl = process.env.SUPABASE_URL!
 const supabasePublishableKey =
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 export function createPublicClient() {
@@ -31,11 +30,7 @@ export async function createClient() {
           try {
             cookiesToSet.forEach(
               ({ name, value, options }) => {
-                cookieStore.set(
-                  name,
-                  value,
-                  options
-                )
+                cookieStore.set(name, value, options)
               }
             )
           } catch {
@@ -78,15 +73,49 @@ export async function getAdminSession() {
     return null
   }
 
-  return user
+  const serviceClient = createServiceClient()
+
+  const { data: adminRecord, error: adminError } =
+    await serviceClient
+      .from('admin_users')
+      .select('id, email, role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+  if (adminError || !adminRecord) {
+    return null
+  }
+
+  return {
+    user,
+    admin: adminRecord,
+  }
 }
 
 export async function requireAdmin() {
-  const user = await getAdminSession()
+  const session = await getAdminSession()
 
-  if (!user) {
+  if (!session) {
     throw new Error('Unauthorized')
   }
 
-  return user
+  return session
+}
+
+export async function hasAnyAdmin() {
+  const serviceClient = createServiceClient()
+
+  const { count, error } = await serviceClient
+    .from('admin_users')
+    .select('id', {
+      count: 'exact',
+      head: true,
+    })
+
+  if (error) {
+    console.error('[hasAnyAdmin]', error)
+    return false
+  }
+
+  return (count ?? 0) > 0
 }
