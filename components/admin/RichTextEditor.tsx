@@ -63,16 +63,16 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
 
   return (
     <div className="space-y-1.5">
-      {label && <label className="block text-xs font-medium text-white/70">{label}</label>}
-      <div className="border border-white/10 rounded-xl bg-[#10141d] overflow-hidden focus-within:border-[#00ABED] transition-colors">
+      {label && <label className="block text-sm font-medium text-slate-600">{label}</label>}
+      <div className="border border-slate-200 rounded-xl bg-slate-50 overflow-hidden focus-within:border-[#4F46E5] transition-colors">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-1 p-2 bg-[#161d2b] border-b border-white/10">
+        <div className="flex flex-wrap items-center justify-between gap-1 p-2 bg-slate-50 border-b border-slate-200">
           <div className="flex flex-wrap items-center gap-1">
             <button
               type="button"
               onClick={() => exec('formatBlock', '<h2>')}
               title="Heading 2"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Heading2 className="w-4 h-4" />
             </button>
@@ -80,7 +80,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('formatBlock', '<h3>')}
               title="Heading 3"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Heading3 className="w-4 h-4" />
             </button>
@@ -88,18 +88,18 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('formatBlock', '<p>')}
               title="Paragraph"
-              className="px-2 py-1 text-xs text-white/60 hover:text-white hover:bg-white/10 rounded-md font-mono"
+              className="px-2 py-1 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md font-mono"
             >
               P
             </button>
 
-            <div className="w-[1px] h-4 bg-white/10 mx-1" />
+            <div className="w-[1px] h-4 bg-slate-50 mx-1" />
 
             <button
               type="button"
               onClick={() => exec('bold')}
               title="Bold"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Bold className="w-4 h-4" />
             </button>
@@ -107,7 +107,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('italic')}
               title="Italic"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Italic className="w-4 h-4" />
             </button>
@@ -115,18 +115,18 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('underline')}
               title="Underline"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Underline className="w-4 h-4" />
             </button>
 
-            <div className="w-[1px] h-4 bg-white/10 mx-1" />
+            <div className="w-[1px] h-4 bg-slate-50 mx-1" />
 
             <button
               type="button"
               onClick={() => exec('insertUnorderedList')}
               title="Bullet List"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <List className="w-4 h-4" />
             </button>
@@ -134,7 +134,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('insertOrderedList')}
               title="Numbered List"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <ListOrdered className="w-4 h-4" />
             </button>
@@ -142,18 +142,18 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('formatBlock', '<blockquote>')}
               title="Quote"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <Quote className="w-4 h-4" />
             </button>
 
-            <div className="w-[1px] h-4 bg-white/10 mx-1" />
+            <div className="w-[1px] h-4 bg-slate-50 mx-1" />
 
             <button
               type="button"
               onClick={() => exec('justifyLeft')}
               title="Align Left"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <AlignLeft className="w-4 h-4" />
             </button>
@@ -161,7 +161,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('justifyCenter')}
               title="Align Center"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <AlignCenter className="w-4 h-4" />
             </button>
@@ -169,18 +169,18 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
               type="button"
               onClick={() => exec('justifyRight')}
               title="Align Right"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <AlignRight className="w-4 h-4" />
             </button>
 
-            <div className="w-[1px] h-4 bg-white/10 mx-1" />
+            <div className="w-[1px] h-4 bg-slate-50 mx-1" />
 
             <button
               type="button"
               onClick={addLink}
               title="Insert Link"
-              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
             >
               <LinkIcon className="w-4 h-4" />
             </button>
@@ -190,10 +190,10 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             <button
               type="button"
               onClick={() => setTab(tab === 'edit' ? 'preview' : 'edit')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-lg transition-colors ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 text-sm rounded-lg transition-colors ${
                 tab === 'preview'
-                  ? 'bg-[#00ABED] text-black font-semibold'
-                  : 'text-white/60 hover:text-white hover:bg-white/10'
+                  ? 'bg-[#4F46E5] text-white font-semibold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               {tab === 'edit' ? <Eye className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
@@ -210,12 +210,12 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write c
             onInput={handleInput}
             onBlur={handleInput}
             data-placeholder={placeholder}
-            className="p-4 min-h-[160px] max-h-[400px] overflow-y-auto text-sm text-white/90 leading-relaxed outline-none focus:ring-0 empty:before:content-[attr(data-placeholder)] empty:before:text-white/30 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:my-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-2 [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-2 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-2 [&>blockquote]:border-l-2 [&>blockquote]:border-[#00ABED] [&>blockquote]:pl-3 [&>blockquote]:italic [&>blockquote]:my-2 [&>a]:text-[#00ABED] [&>a]:underline"
+            className="p-4 min-h-[160px] max-h-[400px] overflow-y-auto text-sm text-slate-600 leading-relaxed outline-none focus:ring-0 empty:before:content-[attr(data-placeholder)] empty:before:text-slate-500 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:my-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-2 [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-2 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-2 [&>blockquote]:border-l-2 [&>blockquote]:border-[#4F46E5] [&>blockquote]:pl-3 [&>blockquote]:italic [&>blockquote]:my-2 [&>a]:text-[#4F46E5] [&>a]:underline"
           />
         ) : (
           <div
-            className="p-4 min-h-[160px] max-h-[400px] overflow-y-auto text-sm text-white/90 leading-relaxed bg-[#0b0e14] [&>h2]:text-xl [&>h2]:font-bold [&>h2]:my-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-2 [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-2 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-2 [&>blockquote]:border-l-2 [&>blockquote]:border-[#00ABED] [&>blockquote]:pl-3 [&>blockquote]:italic [&>blockquote]:my-2 [&>a]:text-[#00ABED] [&>a]:underline"
-            dangerouslySetInnerHTML={{ __html: value || '<p class="text-white/30 italic">Nothing to preview</p>' }}
+            className="p-4 min-h-[160px] max-h-[400px] overflow-y-auto text-sm text-slate-600 leading-relaxed bg-slate-50 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:my-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:my-2 [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:mb-2 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:mb-2 [&>blockquote]:border-l-2 [&>blockquote]:border-[#4F46E5] [&>blockquote]:pl-3 [&>blockquote]:italic [&>blockquote]:my-2 [&>a]:text-[#4F46E5] [&>a]:underline"
+            dangerouslySetInnerHTML={{ __html: value || '<p class="text-slate-500 italic">Nothing to preview</p>' }}
           />
         )}
       </div>

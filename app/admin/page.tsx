@@ -1,285 +1,66 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  FileText,
-  Image as ImageIcon,
-  Layers,
-  Inbox,
-  ArrowUpRight,
-  Plus,
-  CheckCircle,
-  Clock,
-  Sparkles,
-  ChevronRight,
-} from 'lucide-react';
+import { FileText, Image as ImageIcon, Layers, Inbox, ArrowUpRight, Plus, Sparkles, ChevronRight, Settings } from 'lucide-react';
+import type { CMSPage, ContactSubmission } from '@/types';
+import styles from './workspace.module.css';
+
+type DashboardData = { pages: CMSPage[]; inquiries: ContactSubmission[]; media: number; collections: number };
 
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState({
-    totalPages: 0,
-    publishedPages: 0,
-    draftPages: 0,
-    mediaCount: 0,
-    servicesCount: 0,
-    projectsCount: 0,
-    teamCount: 0,
-    testimonialsCount: 0,
-    inquiriesCount: 0,
-    newInquiriesCount: 0,
-  });
-  const [recentInquiries, setRecentInquiries] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    async function loadDashboardData() {
+    const controller = new AbortController();
+    async function load() {
       try {
-        const [pagesRes, mediaRes, servicesRes, projectsRes, teamRes, testRes, inqRes] =
-          await Promise.all([
-            fetch('/api/admin/pages').then((r) => r.json()).catch(() => ({ pages: [] })),
-            fetch('/api/admin/media').then((r) => r.json()).catch(() => ({ media: [] })),
-            fetch('/api/admin/collections?type=services').then((r) => r.json()).catch(() => ({ items: [] })),
-            fetch('/api/admin/collections?type=projects').then((r) => r.json()).catch(() => ({ items: [] })),
-            fetch('/api/admin/collections?type=team').then((r) => r.json()).catch(() => ({ items: [] })),
-            fetch('/api/admin/collections?type=testimonials').then((r) => r.json()).catch(() => ({ items: [] })),
-            fetch('/api/admin/inquiries').then((r) => r.json()).catch(() => ({ submissions: [] })),
-          ]);
-
-        const pages = pagesRes.pages || [];
-        const media = mediaRes.media || [];
-        const services = servicesRes.items || [];
-        const projects = projectsRes.items || [];
-        const team = teamRes.items || [];
-        const testimonials = testRes.items || [];
-        const inquiries = inqRes.submissions || [];
-
-        setStats({
-          totalPages: pages.length,
-          publishedPages: pages.filter((p: any) => p.is_published).length,
-          draftPages: pages.filter((p: any) => !p.is_published).length,
-          mediaCount: media.length,
-          servicesCount: services.length,
-          projectsCount: projects.length,
-          teamCount: team.length,
-          testimonialsCount: testimonials.length,
-          inquiriesCount: inquiries.length,
-          newInquiriesCount: inquiries.filter((i: any) => i.status === 'new').length,
-        });
-
-        setRecentInquiries(inquiries.slice(0, 5));
-      } catch (err) {
-        console.error('Failed to load dashboard data:', err);
-      } finally {
-        setLoading(false);
-      }
+        const paths = ['pages', 'media', 'inquiries', ...['services', 'projects', 'team', 'testimonials', 'stats'].map(type => `collections?type=${type}`)];
+        const results = await Promise.all(paths.map(async path => {
+          const response = await fetch(`/api/admin/${path}`, { signal: controller.signal });
+          if (!response.ok) throw new Error('Unable to load workspace');
+          return response.json();
+        }));
+        setData({ pages: results[0].pages || [], media: (results[1].media || []).length, inquiries: results[2].submissions || [], collections: results.slice(3).reduce((sum, result) => sum + (result.items || []).length, 0) });
+        setError(false);
+      } catch { if (!controller.signal.aborted) setError(true); }
     }
+    load();
+    return () => controller.abort();
+  }, [attempt]);
 
-    loadDashboardData();
-  }, []);
+  if (error) return <div className={`${styles.panel} ${styles.empty}`} role="alert"><Inbox size={32} /><strong>We couldn’t load your workspace</strong><p>Please try again to see your latest content and inquiries.</p><button className={`${styles.primary} mt-5`} onClick={() => { setError(false); setAttempt(attempt + 1); }}>Try again</button></div>;
+  if (!data) return <div className={styles.empty} role="status"><Sparkles size={28} /><p>Loading your workspace…</p></div>;
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20 text-white/50 text-xs">
-        <div className="w-5 h-5 border-2 border-[#00ABED] border-t-transparent rounded-full animate-spin mr-2" />
-        Loading dashboard metrics...
-      </div>
-    );
-  }
+  const published = data.pages.filter(page => page.is_published).length;
+  const newInquiries = data.inquiries.filter(item => item.status === 'new').length;
+  const recent = [...data.inquiries].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || '')).slice(0, 5);
+  const metrics = [
+    { label: 'Total inquiries', value: data.inquiries.length, detail: `${newInquiries} new · ready for a reply`, icon: Inbox, href: '/admin/inquiries' },
+    { label: 'Website pages', value: data.pages.length, detail: `${published} published · ${data.pages.length - published} drafts`, icon: FileText, href: '/admin/pages' },
+    { label: 'Collection items', value: data.collections, detail: 'Across your five collections', icon: Layers, href: '/admin/collections' },
+    { label: 'Media assets', value: data.media, detail: 'Your creative library, organized', icon: ImageIcon, href: '/admin/media' },
+  ];
+  const actions = [
+    { title: 'Manage pages', description: 'Build and update your website content', icon: FileText, href: '/admin/pages' },
+    { title: 'Organize collections', description: 'Projects, services, people & more', icon: Layers, href: '/admin/collections' },
+    { title: 'Upload media', description: 'Give your next idea a visual', icon: ImageIcon, href: '/admin/media' },
+    { title: 'Website settings', description: 'Keep your studio details up to date', icon: Settings, href: '/admin/settings' },
+  ];
 
-  return (
-    <div className="space-y-8">
-      {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#002D43] via-[#004362] to-[#0F141F] p-8 border border-white/10 shadow-2xl">
-        <div className="relative z-10 max-w-xl space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00ABED]/20 text-[#00ABED] text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Admin Center</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Genie Studio Content Manager
-          </h1>
-          <p className="text-sm text-white/70 leading-relaxed">
-            Manage your pages, content blocks, service offerings, portfolio projects, media assets, and incoming client inquiries from one central control panel.
-          </p>
-        </div>
-      </div>
-
-      {/* Primary KPI Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#121824] border border-white/5 rounded-2xl p-5 space-y-2">
-          <div className="flex items-center justify-between text-white/50 text-xs">
-            <span>Pages</span>
-            <FileText className="w-4 h-4 text-[#00ABED]" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.totalPages}</div>
-          <div className="text-[11px] text-white/40 flex items-center gap-1">
-            <span className="text-emerald-400 font-medium">{stats.publishedPages} published</span>
-            <span>·</span>
-            <span>{stats.draftPages} draft</span>
-          </div>
-        </div>
-
-        <div className="bg-[#121824] border border-white/5 rounded-2xl p-5 space-y-2">
-          <div className="flex items-center justify-between text-white/50 text-xs">
-            <span>Media Assets</span>
-            <ImageIcon className="w-4 h-4 text-cyan-400" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.mediaCount}</div>
-          <div className="text-[11px] text-white/40">In Supabase Storage bucket</div>
-        </div>
-
-        <div className="bg-[#121824] border border-white/5 rounded-2xl p-5 space-y-2">
-          <div className="flex items-center justify-between text-white/50 text-xs">
-            <span>Collections</span>
-            <Layers className="w-4 h-4 text-indigo-400" />
-          </div>
-          <div className="text-2xl font-bold text-white">
-            {stats.servicesCount + stats.projectsCount + stats.teamCount}
-          </div>
-          <div className="text-[11px] text-white/40">
-            {stats.servicesCount} Services · {stats.projectsCount} Projects
-          </div>
-        </div>
-
-        <div className="bg-[#121824] border border-white/5 rounded-2xl p-5 space-y-2">
-          <div className="flex items-center justify-between text-white/50 text-xs">
-            <span>Inquiries</span>
-            <Inbox className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div className="text-2xl font-bold text-white">{stats.inquiriesCount}</div>
-          <div className="text-[11px] text-emerald-400 font-medium">
-            {stats.newInquiriesCount} unread / new
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions & Recent Inquiries Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick Actions */}
-        <div className="lg:col-span-1 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-white/60">Quick Actions</h2>
-          <div className="space-y-2">
-            <Link
-              href="/admin/pages"
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#121824] border border-white/5 hover:border-[#00ABED]/40 hover:bg-white/[0.03] transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#00ABED]/10 text-[#00ABED] flex items-center justify-center">
-                  <FileText className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white group-hover:text-[#00ABED] transition-colors">
-                    Edit Pages & Sections
-                  </h3>
-                  <p className="text-[11px] text-white/40">Customize homepage and custom pages</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 group-hover:text-white transition-all" />
-            </Link>
-
-            <Link
-              href="/admin/collections"
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#121824] border border-white/5 hover:border-indigo-500/40 hover:bg-white/[0.03] transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-                  <Layers className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">
-                    Manage Collections
-                  </h3>
-                  <p className="text-[11px] text-white/40">Services, projects, team & reviews</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 group-hover:text-white transition-all" />
-            </Link>
-
-            <Link
-              href="/admin/media"
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#121824] border border-white/5 hover:border-cyan-500/40 hover:bg-white/[0.03] transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                  <ImageIcon className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors">
-                    Upload & Browse Media
-                  </h3>
-                  <p className="text-[11px] text-white/40">Manage logos, images & project covers</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 group-hover:text-white transition-all" />
-            </Link>
-
-            <Link
-              href="/admin/settings"
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#121824] border border-white/5 hover:border-emerald-500/40 hover:bg-white/[0.03] transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                  <ArrowUpRight className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white group-hover:text-emerald-400 transition-colors">
-                    Website Settings & SEO
-                  </h3>
-                  <p className="text-[11px] text-white/40">Contact info, metadata & branding</p>
-                </div>
-              </div>
-              <ChevronRight className="w-4 h-4 text-white/30 group-hover:translate-x-1 group-hover:text-white transition-all" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Recent Inquiries Feed */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white/60">Recent Client Inquiries</h2>
-            <Link
-              href="/admin/inquiries"
-              className="text-xs text-[#00ABED] hover:underline flex items-center gap-1"
-            >
-              <span>View all</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="bg-[#121824] border border-white/5 rounded-2xl overflow-hidden divide-y divide-white/5">
-            {recentInquiries.length === 0 ? (
-              <div className="p-8 text-center text-white/40 text-xs">
-                <Inbox className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                No inquiries received yet. When visitors fill out the contact form, submissions will appear here.
-              </div>
-            ) : (
-              recentInquiries.map((inq) => (
-                <div key={inq.id} className="p-4 flex items-start justify-between gap-4 hover:bg-white/[0.02] transition-colors">
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-medium text-white truncate">{inq.name}</h4>
-                      {inq.status === 'new' ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          New
-                        </span>
-                      ) : (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-white/40">
-                          {inq.status}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-white/50 truncate">{inq.email} · {inq.service || 'General'}</p>
-                    <p className="text-xs text-white/70 line-clamp-1 italic">&ldquo;{inq.message}&rdquo;</p>
-                  </div>
-                  <div className="text-[10px] text-white/30 shrink-0">
-                    {inq.created_at ? new Date(inq.created_at).toLocaleDateString() : ''}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+  return <div>
+    <div className={styles.heading}><div><p className={styles.eyebrow}>Your studio, at a glance</p><h1>Workspace overview</h1><p className={styles.subtitle}>A little clarity for your next big idea.</p></div><Link href="/admin/pages" className={styles.primary}><Plus size={16} /> Manage pages</Link></div>
+    <div className={styles.welcome}><div><h2>Welcome to your creative workspace.</h2><p>Keep your content fresh and your client conversations moving. Everything you need to manage Genie Studio is right here.</p></div><div className={styles.welcomeArt} aria-hidden="true"><Sparkles size={40} strokeWidth={1.3} /></div></div>
+    <div className={styles.metrics}>{metrics.map(metric => <Link href={metric.href} key={metric.label} className={styles.metric}><div className={styles.metricLabel}>{metric.label}<span className={styles.metricIcon}><metric.icon size={17} /></span></div><strong>{metric.value}</strong><small>{metric.detail}</small></Link>)}</div>
+    <div className={styles.dashboardGrid}>
+      <section className={styles.panel}><div className={styles.panelHeading}><div><h2>Recent inquiries</h2><p>Your latest client conversations</p></div><Link href="/admin/inquiries">View all <ArrowUpRight size={14} /></Link></div>
+        {recent.length ? recent.map(item => <Link href="/admin/inquiries" className={styles.inquiryRow} key={item.id}><span className={styles.avatar}>{item.name.slice(0, 2).toUpperCase()}</span><div className={styles.inquiryDetails}><strong>{item.name}</strong><p>{item.service || item.message}</p></div><span className={`${styles.badge} ${item.status === 'new' ? styles.badgeNew : ''}`}>{item.status || 'new'}</span><ChevronRight size={14} color="#b1b8c7" /></Link>) : <div className={styles.empty}><Inbox size={30} /><strong>Your next conversation starts here</strong><p>New website inquiries will appear in your inbox.</p></div>}
+      </section>
+      <div><section className={styles.panel}><div className={styles.panelHeading}><div><h2>Quick actions</h2><p>Make something happen</p></div><Sparkles size={16} color="#aaa0db" /></div>{actions.map(action => <Link href={action.href} className={styles.quickAction} key={action.title}><span><action.icon size={18} /></span><div><strong>{action.title}</strong><small>{action.description}</small></div><ChevronRight size={14} /></Link>)}</section>
+        <section className={`${styles.panel} ${styles.publication}`}><h2>Content readiness</h2><p>{published} of {data.pages.length} pages published{data.pages.length - published > 0 ? ` · ${data.pages.length - published} waiting in drafts` : ''}</p><div className={styles.progress} role="progressbar" aria-label="Published pages" aria-valuenow={published} aria-valuemin={0} aria-valuemax={data.pages.length || 1}><span style={{ width: `${data.pages.length ? published / data.pages.length * 100 : 0}%` }} /></div></section>
       </div>
     </div>
-  );
+  </div>;
 }

@@ -107,10 +107,10 @@ export default function AdminMediaPage() {
         onCancel={() => setDeleteItem(null)}
       />
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight">Media Library</h1>
-          <p className="text-xs text-white/50 mt-1">
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Media Library</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Upload, browse, and manage images stored in Supabase Storage.
           </p>
         </div>
@@ -127,7 +127,7 @@ export default function AdminMediaPage() {
             type="button"
             disabled={uploading}
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2 bg-[#00ABED] hover:bg-[#009AD4] text-black font-semibold text-xs rounded-xl shadow-lg shadow-cyan-950/40 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-sm rounded-xl shadow-lg shadow-slate-200/50 transition-all disabled:opacity-50"
           >
             <Upload className="w-4 h-4" />
             <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
@@ -136,9 +136,9 @@ export default function AdminMediaPage() {
       </div>
 
       {/* Search and stats bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#121824] border border-white/5 rounded-2xl p-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white border border-slate-200 rounded-2xl p-3">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
             type="text"
             placeholder="Search images by name or alt text..."
@@ -147,22 +147,22 @@ export default function AdminMediaPage() {
               setSearch(e.target.value);
               loadMedia(e.target.value);
             }}
-            className="w-full pl-9 pr-4 py-1.5 text-xs bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#00ABED]"
+            className="w-full pl-9 pr-4 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-white/30 focus:outline-none focus:border-[#4F46E5]"
           />
         </div>
-        <div className="text-xs text-white/50 px-2">
-          Total items: <span className="font-semibold text-white">{mediaList.length}</span>
+        <div className="text-sm text-slate-500 px-2">
+          Total items: <span className="font-semibold text-slate-900">{mediaList.length}</span>
         </div>
       </div>
 
       {/* Media Grid */}
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-white/50 text-xs">
-          <div className="w-5 h-5 border-2 border-[#00ABED] border-t-transparent rounded-full animate-spin mr-2" />
+        <div className="flex items-center justify-center py-20 text-slate-500 text-sm">
+          <div className="w-5 h-5 border-2 border-[#4F46E5] border-t-transparent rounded-full animate-spin mr-2" />
           Loading media assets...
         </div>
       ) : mediaList.length === 0 ? (
-        <div className="bg-[#121824] border border-white/5 rounded-2xl p-12 text-center text-white/40 text-xs">
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 text-sm">
           <ImageIcon className="w-10 h-10 mx-auto mb-2 opacity-30" />
           No media files found. Click &quot;Upload Image&quot; to add your first asset.
         </div>
@@ -171,7 +171,7 @@ export default function AdminMediaPage() {
           {mediaList.map((item) => (
             <div
               key={item.id}
-              className="bg-[#121824] border border-white/5 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-white/20 transition-all shadow-md"
+              className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-slate-200 transition-all shadow-md"
             >
               <div className="relative aspect-video bg-black/40 overflow-hidden flex items-center justify-center">
                 <img
@@ -179,12 +179,12 @@ export default function AdminMediaPage() {
                   alt={item.alt_text || item.name}
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
+                <div className="absolute inset-0 bg-black/60 opacity-100 md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
                   <a
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
+                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-50 text-slate-900 text-sm transition-colors"
                     title="Open full image"
                   >
                     <ExternalLink className="w-4 h-4" />
@@ -192,11 +192,11 @@ export default function AdminMediaPage() {
                   <button
                     type="button"
                     onClick={() => copyUrl(item)}
-                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
+                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-50 text-slate-900 text-sm transition-colors"
                     title="Copy URL"
                   >
                     {copiedId === item.id ? (
-                      <Check className="w-4 h-4 text-emerald-400" />
+                      <Check className="w-4 h-4 text-emerald-700" />
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
@@ -204,7 +204,7 @@ export default function AdminMediaPage() {
                   <button
                     type="button"
                     onClick={() => setDeleteItem(item)}
-                    className="p-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs transition-colors"
+                    className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm transition-colors"
                     title="Delete image"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -213,10 +213,10 @@ export default function AdminMediaPage() {
               </div>
 
               <div className="p-3.5 space-y-1">
-                <p className="text-xs font-semibold text-white truncate" title={item.name}>
+                <p className="text-sm font-semibold text-slate-900 truncate" title={item.name}>
                   {item.name}
                 </p>
-                <div className="flex items-center justify-between text-[10px] text-white/40">
+                <div className="flex items-center justify-between text-[11px] text-slate-500">
                   <span>{formatBytes(item.size)}</span>
                   <span className="font-mono">{item.mime_type?.split('/')[1]?.toUpperCase()}</span>
                 </div>

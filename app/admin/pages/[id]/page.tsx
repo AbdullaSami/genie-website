@@ -262,8 +262,8 @@ export default function PageBuilderPage() {
 
   if (loading || !page) {
     return (
-      <div className="flex items-center justify-center py-20 text-white/50 text-xs">
-        <div className="w-5 h-5 border-2 border-[#00ABED] border-t-transparent rounded-full animate-spin mr-2" />
+      <div className="flex items-center justify-center py-20 text-slate-500 text-sm">
+        <div className="w-5 h-5 border-2 border-[#4F46E5] border-t-transparent rounded-full animate-spin mr-2" />
         Loading Page Builder...
       </div>
     );
@@ -294,28 +294,28 @@ export default function PageBuilderPage() {
       />
 
       {/* Top Breadcrumbs & Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
           <Link
             href="/admin/pages"
-            className="p-2 text-white/50 hover:text-white rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+            className="p-2 text-slate-500 hover:text-slate-900 rounded-xl bg-slate-50 hover:bg-slate-50 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-white tracking-tight">{page.title}</h1>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{page.title}</h1>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                   page.is_published
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                    ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/20'
+                    : 'bg-amber-500/10 text-amber-700 border border-amber-500/20'
                 }`}
               >
                 {page.is_published ? 'Published' : 'Draft'}
               </span>
             </div>
-            <p className="text-xs text-white/40 font-mono mt-0.5">{publicUrl}</p>
+            <p className="text-sm text-slate-500 font-mono mt-0.5">{publicUrl}</p>
           </div>
         </div>
 
@@ -323,16 +323,16 @@ export default function PageBuilderPage() {
           <Link
             href={publicUrl}
             target="_blank"
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white/80 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-[#00ABED]" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#4F46E5]" />
             <span>Preview Page</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setPageSettingsOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white/80 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-50 border border-slate-200 rounded-xl transition-colors"
           >
             <SettingsIcon className="w-3.5 h-3.5" />
             <span>SEO &amp; Settings</span>
@@ -341,7 +341,7 @@ export default function PageBuilderPage() {
           <button
             type="button"
             onClick={() => setAddBlockModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#00ABED] hover:bg-[#009AD4] text-black font-semibold text-xs rounded-xl shadow-lg shadow-cyan-950/40 transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-sm rounded-xl shadow-lg shadow-slate-200/50 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Add Block</span>
@@ -352,7 +352,7 @@ export default function PageBuilderPage() {
       {/* Sections List */}
       <div className="space-y-4">
         {sections.length === 0 ? (
-          <div className="bg-[#121824] border border-white/5 rounded-2xl p-12 text-center text-white/40 text-xs">
+          <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 text-sm">
             <Layers className="w-10 h-10 mx-auto mb-2 opacity-30" />
             No content blocks on this page yet. Click &quot;Add Block&quot; to begin building.
           </div>
@@ -367,12 +367,12 @@ export default function PageBuilderPage() {
             return (
               <div
                 key={section.id}
-                className={`bg-[#121824] border rounded-2xl transition-all overflow-hidden ${
-                  isExpanded ? 'border-[#00ABED]/40 shadow-xl shadow-cyan-950/20' : 'border-white/5'
+                className={`bg-white border rounded-2xl transition-all overflow-hidden ${
+                  isExpanded ? 'border-[#4F46E5]/40 shadow-xl shadow-slate-200/50' : 'border-slate-200'
                 } ${!section.is_active ? 'opacity-60' : ''}`}
               >
                 {/* Header Bar */}
-                <div className="p-4 flex items-center justify-between gap-3 bg-[#151d2c]/50">
+                <div className="p-4 flex items-center justify-between gap-3 bg-slate-50">
                   <div className="flex items-center gap-3 min-w-0">
                     {/* Reorder controls */}
                     <div className="flex flex-col gap-0.5">
@@ -380,7 +380,7 @@ export default function PageBuilderPage() {
                         type="button"
                         disabled={index === 0}
                         onClick={() => moveSection(index, 'up')}
-                        className="p-1 rounded text-white/40 hover:text-white disabled:opacity-20 transition-colors"
+                        className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-20 transition-colors"
                       >
                         <ArrowUp className="w-3 h-3" />
                       </button>
@@ -388,7 +388,7 @@ export default function PageBuilderPage() {
                         type="button"
                         disabled={index === sections.length - 1}
                         onClick={() => moveSection(index, 'down')}
-                        className="p-1 rounded text-white/40 hover:text-white disabled:opacity-20 transition-colors"
+                        className="p-1 rounded text-slate-500 hover:text-slate-900 disabled:opacity-20 transition-colors"
                       >
                         <ArrowDown className="w-3 h-3" />
                       </button>
@@ -399,14 +399,14 @@ export default function PageBuilderPage() {
                       onClick={() => setExpandedId(isExpanded ? null : section.id)}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono px-2 py-0.5 rounded bg-white/5 text-[#00ABED] uppercase font-bold">
+                        <span className="text-sm font-mono px-2 py-0.5 rounded bg-slate-50 text-[#4F46E5] uppercase font-bold">
                           {section.block_type}
                         </span>
-                        <h4 className="text-sm font-semibold text-white truncate">
+                        <h4 className="text-sm font-semibold text-slate-900 truncate">
                           {section.title || blockInfo.name}
                         </h4>
                       </div>
-                      <p className="text-[11px] text-white/40 truncate">{blockInfo.desc}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{blockInfo.desc}</p>
                     </div>
                   </div>
 
@@ -420,8 +420,8 @@ export default function PageBuilderPage() {
                       }}
                       className={`p-1.5 rounded-lg transition-colors ${
                         section.is_active
-                          ? 'text-emerald-400 hover:bg-emerald-500/10'
-                          : 'text-white/30 hover:bg-white/5'
+                          ? 'text-emerald-700 hover:bg-emerald-500/10'
+                          : 'text-slate-500 hover:bg-slate-50'
                       }`}
                       title={section.is_active ? 'Block is Active' : 'Block is Disabled'}
                     >
@@ -431,7 +431,7 @@ export default function PageBuilderPage() {
                     <button
                       type="button"
                       onClick={() => handleDuplicateSection(section.id)}
-                      className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
                       title="Duplicate block"
                     >
                       <Copy className="w-4 h-4" />
@@ -440,7 +440,7 @@ export default function PageBuilderPage() {
                     <button
                       type="button"
                       onClick={() => setDeleteSectionId(section.id)}
-                      className="p-1.5 text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+                      className="p-1.5 text-rose-700 hover:bg-rose-500/10 rounded-lg transition-colors"
                       title="Delete block"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -449,7 +449,7 @@ export default function PageBuilderPage() {
                     <button
                       type="button"
                       onClick={() => setExpandedId(isExpanded ? null : section.id)}
-                      className="p-1.5 text-white/50 hover:text-white rounded-lg"
+                      className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg"
                     >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
@@ -458,52 +458,52 @@ export default function PageBuilderPage() {
 
                 {/* Expanded Block Editor Form */}
                 {isExpanded && (
-                  <div className="p-6 border-t border-white/5 space-y-5 bg-[#10141d]/80">
+                  <div className="p-6 border-t border-slate-200 space-y-5 bg-slate-50">
                     {/* Common Title & Subtitle */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-white/70">Section Title / Headline</label>
+                        <label className="text-sm font-medium text-slate-600">Section Title / Headline</label>
                         <input
                           type="text"
                           value={section.title || ''}
                           onChange={(e) => updateSectionState(section.id, { title: e.target.value })}
-                          className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                          className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-white/70">Section Subtitle / Description</label>
+                        <label className="text-sm font-medium text-slate-600">Section Subtitle / Description</label>
                         <input
                           type="text"
                           value={section.subtitle || ''}
                           onChange={(e) => updateSectionState(section.id, { subtitle: e.target.value })}
-                          className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                          className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                         />
                       </div>
                     </div>
 
                     {/* Block-specific fields */}
                     {section.block_type === 'hero' && (
-                      <div className="space-y-4 pt-2 border-t border-white/5">
+                      <div className="space-y-4 pt-2 border-t border-slate-200">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Eyebrow Tagline</label>
+                            <label className="text-sm font-medium text-slate-600">Eyebrow Tagline</label>
                             <input
                               type="text"
                               value={section.content.eyebrow || ''}
                               onChange={(e) => updateSectionContent(section.id, 'eyebrow', e.target.value)}
                               placeholder="e.g. Cairo, Egypt · Est. 2022"
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Icon URL</label>
+                            <label className="text-sm font-medium text-slate-600">Icon URL</label>
                             <div className="flex gap-2">
                               <input
                                 type="text"
                                 value={section.content.icon_url || ''}
                                 onChange={(e) => updateSectionContent(section.id, 'icon_url', e.target.value)}
-                                className="flex-1 px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                                className="flex-1 px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                               />
                               <button
                                 type="button"
@@ -511,9 +511,9 @@ export default function PageBuilderPage() {
                                   setMediaCallback(() => (url: string) =>
                                     updateSectionContent(section.id, 'icon_url', url))
                                 }
-                                className="px-3 py-2 bg-white/10 text-white rounded-xl text-xs flex items-center gap-1"
+                                className="px-3 py-2 bg-slate-50 text-slate-900 rounded-xl text-sm flex items-center gap-1"
                               >
-                                <ImageIcon className="w-3.5 h-3.5 text-[#00ABED]" />
+                                <ImageIcon className="w-3.5 h-3.5 text-[#4F46E5]" />
                                 <span>Browse</span>
                               </button>
                             </div>
@@ -522,48 +522,48 @@ export default function PageBuilderPage() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Primary CTA Text</label>
+                            <label className="text-sm font-medium text-slate-600">Primary CTA Text</label>
                             <input
                               type="text"
                               value={section.content.primary_cta_text || ''}
                               onChange={(e) => updateSectionContent(section.id, 'primary_cta_text', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Primary CTA URL</label>
+                            <label className="text-sm font-medium text-slate-600">Primary CTA URL</label>
                             <input
                               type="text"
                               value={section.content.primary_cta_url || ''}
                               onChange={(e) => updateSectionContent(section.id, 'primary_cta_url', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Secondary CTA Text</label>
+                            <label className="text-sm font-medium text-slate-600">Secondary CTA Text</label>
                             <input
                               type="text"
                               value={section.content.secondary_cta_text || ''}
                               onChange={(e) => updateSectionContent(section.id, 'secondary_cta_text', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Secondary CTA URL</label>
+                            <label className="text-sm font-medium text-slate-600">Secondary CTA URL</label>
                             <input
                               type="text"
                               value={section.content.secondary_cta_url || ''}
                               onChange={(e) => updateSectionContent(section.id, 'secondary_cta_url', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-white/70">
+                          <label className="text-sm font-medium text-slate-600">
                             Animated Slogan Strip Items (comma separated)
                           </label>
                           <input
@@ -576,47 +576,47 @@ export default function PageBuilderPage() {
                                 e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean)
                               )
                             }
-                            className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                            className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                           />
                         </div>
                       </div>
                     )}
 
                     {section.block_type === 'about' && (
-                      <div className="space-y-4 pt-2 border-t border-white/5">
+                      <div className="space-y-4 pt-2 border-t border-slate-200">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Section Label</label>
+                            <label className="text-sm font-medium text-slate-600">Section Label</label>
                             <input
                               type="text"
                               value={section.content.section_label || 'About Genie Studio'}
                               onChange={(e) => updateSectionContent(section.id, 'section_label', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Visual Badge Text</label>
+                            <label className="text-sm font-medium text-slate-600">Visual Badge Text</label>
                             <input
                               type="text"
                               value={section.content.visual_text || 'Est. 2022 · Cairo, Egypt'}
                               onChange={(e) => updateSectionContent(section.id, 'visual_text', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-white/70">Secondary Narrative Paragraph</label>
+                          <label className="text-sm font-medium text-slate-600">Secondary Narrative Paragraph</label>
                           <textarea
                             rows={3}
                             value={section.content.body || ''}
                             onChange={(e) => updateSectionContent(section.id, 'body', e.target.value)}
-                            className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                            className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-white/70">Skill Tags (comma separated)</label>
+                          <label className="text-sm font-medium text-slate-600">Skill Tags (comma separated)</label>
                           <input
                             type="text"
                             value={Array.isArray(section.content.tags) ? section.content.tags.join(', ') : ''}
@@ -627,14 +627,14 @@ export default function PageBuilderPage() {
                                 e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean)
                               )
                             }
-                            className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                            className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                           />
                         </div>
                       </div>
                     )}
 
                     {section.block_type === 'rich_text' && (
-                      <div className="space-y-4 pt-2 border-t border-white/5">
+                      <div className="space-y-4 pt-2 border-t border-slate-200">
                         <RichTextEditor
                           value={section.content.html || ''}
                           onChange={(html) => updateSectionContent(section.id, 'html', html)}
@@ -644,24 +644,24 @@ export default function PageBuilderPage() {
                     )}
 
                     {section.block_type === 'cta' && (
-                      <div className="space-y-4 pt-2 border-t border-white/5">
+                      <div className="space-y-4 pt-2 border-t border-slate-200">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Button Text</label>
+                            <label className="text-sm font-medium text-slate-600">Button Text</label>
                             <input
                               type="text"
                               value={section.content.button_text || ''}
                               onChange={(e) => updateSectionContent(section.id, 'button_text', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-white/70">Button URL</label>
+                            <label className="text-sm font-medium text-slate-600">Button URL</label>
                             <input
                               type="text"
                               value={section.content.button_url || ''}
                               onChange={(e) => updateSectionContent(section.id, 'button_url', e.target.value)}
-                              className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                              className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                             />
                           </div>
                         </div>
@@ -669,23 +669,23 @@ export default function PageBuilderPage() {
                     )}
 
                     {section.block_type === 'custom_html' && (
-                      <div className="space-y-1.5 pt-2 border-t border-white/5">
-                        <label className="text-xs font-medium text-white/70 font-mono">Raw HTML Code</label>
+                      <div className="space-y-1.5 pt-2 border-t border-slate-200">
+                        <label className="text-sm font-medium text-slate-600 font-mono">Raw HTML Code</label>
                         <textarea
                           rows={6}
                           value={section.content.html || ''}
                           onChange={(e) => updateSectionContent(section.id, 'html', e.target.value)}
-                          className="w-full font-mono text-xs p-3 bg-black/50 border border-white/10 rounded-xl text-emerald-400 focus:outline-none focus:border-[#00ABED]"
+                          className="w-full font-mono text-sm p-3 bg-slate-50 border border-slate-200 rounded-xl text-emerald-700 focus:outline-none focus:border-[#4F46E5]"
                         />
                       </div>
                     )}
 
                     {/* Save Button for this block */}
-                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-white/5">
+                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-200">
                       <button
                         type="button"
                         onClick={() => handleSaveSection(section)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-[#00ABED] hover:bg-[#009AD4] text-black font-semibold text-xs rounded-xl transition-all shadow-md shadow-cyan-950/30"
+                        className="flex items-center gap-1.5 px-4 py-2 bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-sm rounded-xl transition-all shadow-md shadow-slate-200/50"
                       >
                         <Save className="w-3.5 h-3.5" />
                         <span>Save Block Changes</span>
@@ -702,16 +702,16 @@ export default function PageBuilderPage() {
       {/* Add Block Modal */}
       {addBlockModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-2xl bg-[#141923] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl space-y-5 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div>
-                <h3 className="text-base font-bold text-white">Add Content Block</h3>
-                <p className="text-xs text-white/50">Choose a modular section to insert into this page</p>
+                <h3 className="text-base font-bold text-slate-900">Add Content Block</h3>
+                <p className="text-sm text-slate-500">Choose a modular section to insert into this page</p>
               </div>
               <button
                 type="button"
                 onClick={() => setAddBlockModal(false)}
-                className="p-1 text-white/50 hover:text-white"
+                className="p-1 text-slate-500 hover:text-slate-900"
               >
                 ✕
               </button>
@@ -725,15 +725,15 @@ export default function PageBuilderPage() {
                     key={type}
                     type="button"
                     onClick={() => handleAddBlock(type)}
-                    className="p-3.5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-[#00ABED]/10 hover:border-[#00ABED]/40 text-left transition-all group"
+                    className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-[#4F46E5]/10 hover:border-[#4F46E5]/40 text-left transition-all group"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-bold text-white group-hover:text-[#00ABED] transition-colors">
+                      <span className="text-sm font-bold text-slate-900 group-hover:text-[#4F46E5] transition-colors">
                         {info.name}
                       </span>
-                      <span className="text-[10px] font-mono text-white/30 uppercase">{type}</span>
+                      <span className="text-[11px] font-mono text-slate-500 uppercase">{type}</span>
                     </div>
-                    <p className="text-[11px] text-white/50 leading-snug">{info.desc}</p>
+                    <p className="text-[11px] text-slate-500 leading-snug">{info.desc}</p>
                   </button>
                 );
               })}
@@ -745,13 +745,13 @@ export default function PageBuilderPage() {
       {/* Page SEO & Settings Modal */}
       {pageSettingsOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-lg bg-[#141923] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-base font-bold text-white">Page SEO &amp; Settings</h3>
+          <div className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="text-base font-bold text-slate-900">Page SEO &amp; Settings</h3>
               <button
                 type="button"
                 onClick={() => setPageSettingsOpen(false)}
-                className="p-1 text-white/50 hover:text-white"
+                className="p-1 text-slate-500 hover:text-slate-900"
               >
                 ✕
               </button>
@@ -759,106 +759,106 @@ export default function PageBuilderPage() {
 
             <form onSubmit={handleSavePageMeta} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-white/70">Page Title</label>
+                <label className="text-sm font-medium text-slate-600">Page Title</label>
                 <input
                   type="text"
                   required
                   value={page.title || ''}
                   onChange={(e) => setPage({ ...page, title: e.target.value })}
-                  className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                 />
               </div>
 
               {page.slug !== 'home' && (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-white/70">URL Slug</label>
+                  <label className="text-sm font-medium text-slate-600">URL Slug</label>
                   <input
                     type="text"
                     required
                     value={page.slug || ''}
                     onChange={(e) => setPage({ ...page, slug: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white font-mono focus:outline-none focus:border-[#00ABED]"
+                    className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono focus:outline-none focus:border-[#4F46E5]"
                   />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-white/70">SEO Meta Title</label>
+                <label className="text-sm font-medium text-slate-600">SEO Meta Title</label>
                 <input
                   type="text"
                   value={page.seo_title || ''}
                   onChange={(e) => setPage({ ...page, seo_title: e.target.value })}
                   placeholder="Defaults to Site Title if left blank"
-                  className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-white/70">SEO Meta Description</label>
+                <label className="text-sm font-medium text-slate-600">SEO Meta Description</label>
                 <textarea
                   rows={3}
                   value={page.seo_description || ''}
                   onChange={(e) => setPage({ ...page, seo_description: e.target.value })}
-                  className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-white/70">OpenGraph Image URL</label>
+                <label className="text-sm font-medium text-slate-600">OpenGraph Image URL</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={page.og_image || ''}
                     onChange={(e) => setPage({ ...page, og_image: e.target.value })}
-                    className="flex-1 px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                    className="flex-1 px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                   />
                   <button
                     type="button"
                     onClick={() =>
                       setMediaCallback(() => (url: string) => setPage({ ...page, og_image: url }))
                     }
-                    className="px-3 py-2 bg-white/10 text-white rounded-xl text-xs flex items-center gap-1"
+                    className="px-3 py-2 bg-slate-50 text-slate-900 rounded-xl text-sm flex items-center gap-1"
                   >
-                    <ImageIcon className="w-3.5 h-3.5 text-[#00ABED]" />
+                    <ImageIcon className="w-3.5 h-3.5 text-[#4F46E5]" />
                     <span>Browse</span>
                   </button>
                 </div>
               </div>
 
-              <div className="pt-2 space-y-2 border-t border-white/5">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-white/80">
+              <div className="pt-2 space-y-2 border-t border-slate-200">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600">
                   <input
                     type="checkbox"
                     checked={page.is_published}
                     onChange={(e) => setPage({ ...page, is_published: e.target.checked })}
-                    className="rounded bg-white/10 border-white/20 text-[#00ABED]"
+                    className="rounded bg-slate-50 border-slate-200 text-[#4F46E5]"
                   />
                   <span>Publish this page publicly</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-white/80">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600">
                   <input
                     type="checkbox"
                     checked={page.no_index}
                     onChange={(e) => setPage({ ...page, no_index: e.target.checked })}
-                    className="rounded bg-white/10 border-white/20 text-[#00ABED]"
+                    className="rounded bg-slate-50 border-slate-200 text-[#4F46E5]"
                   />
                   <span>Prevent search engines from indexing (noindex)</span>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
+              <div className="flex justify-end gap-2 pt-4 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setPageSettingsOpen(false)}
-                  className="px-4 py-2 text-xs font-medium text-white/70 bg-white/5 rounded-xl"
+                  className="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-50 rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingPage}
-                  className="px-4 py-2 text-xs font-semibold bg-[#00ABED] text-black rounded-xl shadow-md disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-semibold bg-[#4F46E5] text-white rounded-xl shadow-md disabled:opacity-50"
                 >
                   {savingPage ? 'Saving...' : 'Save Settings'}
                 </button>

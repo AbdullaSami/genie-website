@@ -113,8 +113,8 @@ export default function AdminFooterPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 text-white/50 text-xs">
-        <div className="w-5 h-5 border-2 border-[#00ABED] border-t-transparent rounded-full animate-spin mr-2" />
+      <div className="flex items-center justify-center py-20 text-slate-500 text-sm">
+        <div className="w-5 h-5 border-2 border-[#4F46E5] border-t-transparent rounded-full animate-spin mr-2" />
         Loading footer layout...
       </div>
     );
@@ -133,17 +133,17 @@ export default function AdminFooterPage() {
         onCancel={() => setDeleteId(null)}
       />
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight">Footer Management</h1>
-          <p className="text-xs text-white/50 mt-1">
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Footer Management</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Organize the columns and link collections displayed in the website footer.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#00ABED] hover:bg-[#009AD4] text-black font-semibold text-xs rounded-xl shadow-lg shadow-cyan-950/40 transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-sm rounded-xl shadow-lg shadow-slate-200/50 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Add Footer Column</span>
@@ -154,10 +154,10 @@ export default function AdminFooterPage() {
         {sections.map((section, sIdx) => (
           <div
             key={section.id}
-            className="bg-[#121824] border border-white/5 rounded-2xl p-5 space-y-4 flex flex-col justify-between"
+            className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 flex flex-col justify-between"
           >
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-white/5">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <input
                   type="text"
                   value={section.title}
@@ -166,12 +166,12 @@ export default function AdminFooterPage() {
                     next[sIdx].title = e.target.value;
                     setSections(next);
                   }}
-                  className="text-sm font-semibold text-white bg-transparent border-b border-transparent hover:border-white/20 focus:border-[#00ABED] outline-none"
+                  className="text-sm font-semibold text-slate-900 bg-transparent border-b border-transparent hover:border-slate-200 focus:border-[#4F46E5] outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => setDeleteId(section.id)}
-                  className="p-1.5 text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+                  className="p-1.5 text-rose-700 hover:bg-rose-500/10 rounded-lg transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -186,19 +186,19 @@ export default function AdminFooterPage() {
                       value={link.label}
                       onChange={(e) => updateLink(sIdx, lIdx, 'label', e.target.value)}
                       placeholder="Label"
-                      className="w-1/2 px-2.5 py-1.5 text-xs bg-white/5 border border-white/10 rounded-lg text-white"
+                      className="w-1/2 px-2.5 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
                     />
                     <input
                       type="text"
                       value={link.url}
                       onChange={(e) => updateLink(sIdx, lIdx, 'url', e.target.value)}
                       placeholder="#url or mailto:"
-                      className="w-1/2 px-2.5 py-1.5 text-xs bg-white/5 border border-white/10 rounded-lg text-white font-mono"
+                      className="w-1/2 px-2.5 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-mono"
                     />
                     <button
                       type="button"
                       onClick={() => removeLink(sIdx, lIdx)}
-                      className="p-1 text-white/40 hover:text-rose-400"
+                      className="p-1 text-slate-500 hover:text-rose-700"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -208,7 +208,7 @@ export default function AdminFooterPage() {
                 <button
                   type="button"
                   onClick={() => addLinkToSection(sIdx)}
-                  className="flex items-center gap-1.5 text-xs text-[#00ABED] hover:underline pt-1"
+                  className="flex items-center gap-1.5 text-sm text-[#4F46E5] hover:underline pt-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add link</span>
@@ -216,8 +216,8 @@ export default function AdminFooterPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-white/5">
-              <label className="flex items-center gap-2 text-xs text-white/60 cursor-pointer">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={section.is_active}
@@ -226,7 +226,7 @@ export default function AdminFooterPage() {
                     next[sIdx].is_active = e.target.checked;
                     setSections(next);
                   }}
-                  className="rounded bg-white/10 border-white/20 text-[#00ABED]"
+                  className="rounded bg-slate-50 border-slate-200 text-[#4F46E5]"
                 />
                 <span>Active</span>
               </label>
@@ -234,7 +234,7 @@ export default function AdminFooterPage() {
               <button
                 type="button"
                 onClick={() => handleSaveSection(sections[sIdx])}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00ABED] hover:bg-[#009AD4] text-black font-semibold text-xs rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-sm rounded-lg transition-colors"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>Save Column</span>
@@ -247,31 +247,31 @@ export default function AdminFooterPage() {
       {/* Add Column Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-[#141923] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
-            <h3 className="text-sm font-semibold text-white">Add New Footer Column</h3>
+          <div className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl space-y-4">
+            <h3 className="text-sm font-semibold text-slate-900">Add New Footer Column</h3>
             <form onSubmit={handleAddSection} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-white/70">Column Title</label>
+                <label className="text-sm font-medium text-slate-600">Column Title</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Explore, Company, Legal"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#00ABED]"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-[#4F46E5]"
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-white/70 bg-white/5 rounded-lg"
+                  className="px-3 py-1.5 text-sm text-slate-600 bg-slate-50 rounded-lg"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 text-xs font-semibold bg-[#00ABED] text-black rounded-lg"
+                  className="px-4 py-1.5 text-sm font-semibold bg-[#4F46E5] text-white rounded-lg"
                 >
                   Add Column
                 </button>
